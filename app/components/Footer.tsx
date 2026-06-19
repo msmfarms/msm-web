@@ -2,6 +2,8 @@
 
 import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
 import Logo from "./Logo";
+import { useState } from "react";
+import Toast from "./Toast";
 
 function FacebookIcon({ className }: { className?: string }) {
   return (
@@ -61,8 +63,8 @@ const socialLinks = [
 const contactItems = [
   {
     icon: Phone,
-    text: "+91 XXXXX XXXXX",
-    href: "tel:+91XXXXXXXXXX",
+    text: "+91 98848 46931",
+    href: "tel:+919884846931",
   },
   {
     icon: Mail,
@@ -71,12 +73,13 @@ const contactItems = [
   },
   {
     icon: MapPin,
-    text: "Andhra Pradesh, India",
+    text: "Madanapalle, Annamayya Dist, Andhra Pradesh, India",
     href: null,
   },
 ];
 
 export default function Footer() {
+  const [toastOpen, setToastOpen] = useState(false);
   return (
     <footer className="bg-[#0d1f14] text-white">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -158,30 +161,36 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="min-w-0 sm:col-span-2 lg:col-span-2">
+          <div className="min-w-0 sm:col-span-2 lg:col-span-3">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
               Stay Updated
             </h3>
-            <p className="mt-4 text-sm text-white/60">
+            <p className="mt-4 text-sm text-white/70">
               Subscribe to our newsletter for the latest updates.
             </p>
             <form
-              className="mt-4 flex max-w-sm gap-2"
+              className="mt-6 flex w-full gap-3"
               onSubmit={(e) => e.preventDefault()}
             >
               <input
                 type="email"
                 placeholder="Your email"
-                className="min-w-0 flex-1 rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-[#6bbf59] focus:outline-none"
+                className="min-w-0 flex-1 rounded-lg border-2 border-white/30 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/60 transition-colors focus:border-[#6bbf59] focus:outline-none"
               />
               <button
                 type="submit"
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#6bbf59] text-[#0f3d26] transition-colors hover:bg-white"
                 aria-label="Subscribe"
+                onClick={() => setToastOpen(true)}
               >
                 <ArrowRight className="h-4 w-4" />
               </button>
             </form>
+            <Toast
+              open={toastOpen}
+              message="Coming soon — newsletter signup not yet configured"
+              onClose={() => setToastOpen(false)}
+            />
           </div>
         </div>
 
@@ -192,13 +201,13 @@ export default function Footer() {
           </p>
           <div className="flex gap-6">
             <a
-              href="#"
+              href="/privacy-policy"
               className="text-sm text-white/50 transition-colors hover:text-[#6bbf59]"
             >
               Privacy Policy
             </a>
             <a
-              href="#"
+              href="/terms-and-conditions"
               className="text-sm text-white/50 transition-colors hover:text-[#6bbf59]"
             >
               Terms &amp; Conditions

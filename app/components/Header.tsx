@@ -6,11 +6,11 @@ import Logo from "./Logo";
 
 const navLinks = [
   { label: "Home", href: "#home" },
-  { label: "About Us", href: "#about" },
-  { label: "Our Services", href: "#services" },
-  { label: "Innovations", href: "#innovations" },
+  { label: "Vision", href: "#vision" },
+  { label: "Products", href: "#services" },
   { label: "Roadmap", href: "#roadmap" },
-  { label: "Contact Us", href: "#contact" },
+  { label: "About Founder", href: "#founder" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export default function Header() {
@@ -18,12 +18,12 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-msm-border bg-white/95 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+      <div className="mx-auto grid max-w-7xl grid-cols-3 items-center gap-4 px-4 py-4 sm:px-6 lg:px-8">
         <a href="#home">
           <Logo />
         </a>
 
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav className="hidden items-center justify-center gap-8 lg:flex">
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -39,21 +39,23 @@ export default function Header() {
           ))}
         </nav>
 
-        <a
-          href="#contact"
-          className="hidden rounded-full bg-msm-green px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-msm-green-dark lg:inline-flex"
-        >
-          Get In Touch
-        </a>
+        <div className="flex items-center justify-end gap-2">
+          <a
+            href="#contact"
+            className="hidden rounded-full bg-msm-green px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-msm-green-dark lg:inline-flex"
+          >
+            Get In Touch
+          </a>
 
-        <button
-          type="button"
-          className="rounded-lg p-2 text-msm-green lg:hidden"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+          <button
+            type="button"
+            className="rounded-lg p-2 text-msm-green lg:hidden"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
 
       {mobileOpen && (

@@ -29,16 +29,16 @@ const innovations = [
     title: "MSM Smart Feed Advisor",
     description:
       "AI-powered livestock nutrition recommendations for healthier herds and better yields.",
-    status: "In Development",
-    statusColor: "bg-blue-50 text-blue-700",
+    status: "Coming Soon",
+    statusColor: "bg-msm-lime-light text-msm-green",
   },
   {
     icon: ShoppingCart,
     title: "MSM Market Connect",
     description:
       "Direct marketplace connecting farmers to buyers, eliminating middlemen and boosting profits.",
-    status: "Planned",
-    statusColor: "bg-orange-50 text-orange-700",
+    status: "Coming Soon",
+    statusColor: "bg-msm-lime-light text-msm-green",
   },
 ];
 
@@ -81,7 +81,7 @@ export default function Innovations() {
 
         <div id="roadmap" className="mt-12 text-center">
           <a
-            href="#contact"
+            href="#roadmap"
             className="inline-flex items-center gap-2 text-sm font-semibold text-msm-green transition-colors hover:text-msm-green-dark"
           >
             View Our Roadmap
