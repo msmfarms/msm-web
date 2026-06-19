@@ -2,25 +2,39 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1a2e1f;
+  --msm-green: #1b5e3b;
+  --msm-green-dark: #0f3d26;
+  --msm-green-light: #2d8a5e;
+  --msm-lime: #6bbf59;
+  --msm-lime-light: #e8f5e3;
+  --msm-gray: #6b7280;
+  --msm-gray-light: #f3f4f6;
+  --msm-border: #e5e7eb;
+  --msm-footer: #0d1f14;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-msm-green: var(--msm-green);
+  --color-msm-green-dark: var(--msm-green-dark);
+  --color-msm-green-light: var(--msm-green-light);
+  --color-msm-lime: var(--msm-lime);
+  --color-msm-lime-light: var(--msm-lime-light);
+  --color-msm-gray: var(--msm-gray);
+  --color-msm-gray-light: var(--msm-gray-light);
+  --color-msm-border: var(--msm-border);
+  --color-msm-footer: var(--msm-footer);
+  --font-sans: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
