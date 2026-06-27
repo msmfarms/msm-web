@@ -14,6 +14,7 @@ const contactDetails = [
 
 export default function ContactSection() {
   const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
@@ -46,19 +47,33 @@ export default function ContactSection() {
             onSubmit={async (e) => {
               e.preventDefault();
               const form = e.currentTarget;
+              const name = (form.elements.namedItem("name") as HTMLInputElement).value.trim();
+              const email = (form.elements.namedItem("email") as HTMLInputElement).value.trim();
+              const message = (form.elements.namedItem("message") as HTMLTextAreaElement).value.trim();
+
+              if (!name || !email || !message) {
+                setToastMessage("Please fill in all required fields");
+                setToastOpen(true);
+                return;
+              }
+
+              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+              if (!emailRegex.test(email)) {
+                setToastMessage("Please enter a valid email address");
+                setToastOpen(true);
+                return;
+              }
+
               setIsSubmitting(true);
-              const formData = {
-                name: (form.elements.namedItem("name") as HTMLInputElement).value,
-                email: (form.elements.namedItem("email") as HTMLInputElement).value,
-                message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
-              };
+              const formData = { name, email, message };
               try {
                 await submitContact(formData);
+                setToastMessage("Message sent successfully!");
                 setToastOpen(true);
                 form.reset();
               } catch (error) {
-                console.error("Failed to submit contact form:", error);
-                alert("Failed to send message. Please try again or contact us directly.");
+                setToastMessage("Failed to send message. Please try again or contact us directly.");
+                setToastOpen(true);
               } finally {
                 setIsSubmitting(false);
               }
@@ -90,7 +105,7 @@ export default function ContactSection() {
               {!isSubmitting && <Send className="h-4 w-4" />}
             </button>
 
-            <Toast open={toastOpen} message="Message sent successfully!" onClose={() => setToastOpen(false)} />
+            <Toast open={toastOpen} message={toastMessage} onClose={() => setToastOpen(false)} />
           </form>
         </div>
       </div>

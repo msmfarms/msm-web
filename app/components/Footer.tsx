@@ -81,6 +81,7 @@ const contactItems = [
 
 export default function Footer() {
   const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
   const [isSubscribing, setIsSubscribing] = useState(false);
   return (
     <footer className="bg-[#0d1f14] text-white">
@@ -175,14 +176,30 @@ export default function Footer() {
               onSubmit={async (e) => {
                 e.preventDefault();
                 const form = e.currentTarget;
+                const email = (form.elements.namedItem("email") as HTMLInputElement).value.trim();
+
+                if (!email) {
+                  setToastMessage("Please enter your email address");
+                  setToastOpen(true);
+                  return;
+                }
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                  setToastMessage("Please enter a valid email address");
+                  setToastOpen(true);
+                  return;
+                }
+
                 setIsSubscribing(true);
-                const email = (form.elements.namedItem("email") as HTMLInputElement).value;
                 try {
                   const result = await subscribeNewsletter({ email });
+                  setToastMessage("Successfully subscribed to newsletter!");
                   setToastOpen(true);
                   form.reset();
                 } catch (error) {
-                  alert("Failed to subscribe. Please try again.");
+                  setToastMessage("Failed to subscribe. Please try again.");
+                  setToastOpen(true);
                 } finally {
                   setIsSubscribing(false);
                 }
@@ -211,7 +228,7 @@ export default function Footer() {
             </form>
             <Toast
               open={toastOpen}
-              message="Successfully subscribed to newsletter!"
+              message={toastMessage}
               onClose={() => setToastOpen(false)}
             />
           </div>
