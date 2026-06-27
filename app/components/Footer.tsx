@@ -4,6 +4,7 @@ import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
 import Logo from "./Logo";
 import { useState } from "react";
 import Toast from "./Toast";
+import { subscribeNewsletter } from "../lib/api";
 
 function FacebookIcon({ className }: { className?: string }) {
   return (
@@ -80,6 +81,7 @@ const contactItems = [
 
 export default function Footer() {
   const [toastOpen, setToastOpen] = useState(false);
+  const [isSubscribing, setIsSubscribing] = useState(false);
   return (
     <footer className="bg-[#0d1f14] text-white">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -170,25 +172,49 @@ export default function Footer() {
             </p>
             <form
               className="mt-6 flex w-full gap-3"
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const form = e.currentTarget;
+                setIsSubscribing(true);
+                const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+                console.log("Submitting newsletter subscription:", email);
+                try {
+                  const result = await subscribeNewsletter({ email });
+                  console.log("Newsletter subscription result:", result);
+                  setToastOpen(true);
+                  form.reset();
+                } catch (error) {
+                  console.error("Failed to subscribe to newsletter:", error);
+                  alert("Failed to subscribe. Please try again.");
+                } finally {
+                  setIsSubscribing(false);
+                }
+              }}
             >
               <input
+                id="email"
                 type="email"
                 placeholder="Your email"
-                className="min-w-0 flex-1 rounded-lg border-2 border-white/30 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/60 transition-colors focus:border-[#6bbf59] focus:outline-none"
+                required
+                disabled={isSubscribing}
+                className="min-w-0 flex-1 rounded-lg border-2 border-white/30 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/60 transition-colors focus:border-[#6bbf59] focus:outline-none disabled:opacity-50"
               />
               <button
                 type="submit"
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#6bbf59] text-[#0f3d26] transition-colors hover:bg-white"
+                disabled={isSubscribing}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#6bbf59] text-[#0f3d26] transition-colors hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Subscribe"
-                onClick={() => setToastOpen(true)}
               >
-                <ArrowRight className="h-4 w-4" />
+                {isSubscribing ? (
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#0f3d26] border-t-transparent" />
+                ) : (
+                  <ArrowRight className="h-4 w-4" />
+                )}
               </button>
             </form>
             <Toast
               open={toastOpen}
-              message="Coming soon — newsletter signup not yet configured"
+              message="Successfully subscribed to newsletter!"
               onClose={() => setToastOpen(false)}
             />
           </div>

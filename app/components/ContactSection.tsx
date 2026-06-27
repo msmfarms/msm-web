@@ -3,6 +3,7 @@
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
 import Toast from "./Toast";
+import { submitContact } from "../lib/api";
 
 const contactDetails = [
   { icon: Phone, label: "Phone", value: "+91 98848 46931", href: "tel:+919884846931" },
@@ -13,6 +14,7 @@ const contactDetails = [
 
 export default function ContactSection() {
   const [toastOpen, setToastOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <section id="contact" className="bg-white py-20 sm:py-28">
@@ -41,9 +43,27 @@ export default function ContactSection() {
 
           <form
             className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] p-6 sm:p-8"
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
-              setToastOpen(true);
+              const form = e.currentTarget;
+              setIsSubmitting(true);
+              const formData = {
+                name: (form.elements.namedItem("name") as HTMLInputElement).value,
+                email: (form.elements.namedItem("email") as HTMLInputElement).value,
+                message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
+              };
+              console.log("Submitting contact form:", formData);
+              try {
+                const result = await submitContact(formData);
+                console.log("Contact form submission result:", result);
+                setToastOpen(true);
+                form.reset();
+              } catch (error) {
+                console.error("Failed to submit contact form:", error);
+                alert("Failed to send message. Please try again or contact us directly.");
+              } finally {
+                setIsSubmitting(false);
+              }
             }}
           >
             <h3 className="text-lg font-bold text-[#1a2e1f]">Send us a message</h3>
@@ -63,12 +83,16 @@ export default function ContactSection() {
               <textarea id="message" rows={4} placeholder="How can we help you?" className="w-full resize-none rounded-lg border border-[#e5e7eb] bg-white px-4 py-2.5 text-sm text-[#1a2e1f] placeholder:text-[#9ca3af] focus:border-[#1b5e3b] focus:outline-none focus:ring-1 focus:ring-[#1b5e3b]" />
             </div>
 
-            <button type="submit" className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#1b5e3b] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#0f3d26]">
-              Send Message
-              <Send className="h-4 w-4" />
+            <button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#1b5e3b] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#0f3d26] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? "Sending..." : "Send Message"}
+              {!isSubmitting && <Send className="h-4 w-4" />}
             </button>
 
-            <Toast open={toastOpen} message="Coming soon — backend not yet configured" onClose={() => setToastOpen(false)} />
+            <Toast open={toastOpen} message="Message sent successfully!" onClose={() => setToastOpen(false)} />
           </form>
         </div>
       </div>
