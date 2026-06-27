@@ -52,10 +52,8 @@ export default function ContactSection() {
                 email: (form.elements.namedItem("email") as HTMLInputElement).value,
                 message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
               };
-              console.log("Submitting contact form:", formData);
               try {
-                const result = await submitContact(formData);
-                console.log("Contact form submission result:", result);
+                await submitContact(formData);
                 setToastOpen(true);
                 form.reset();
               } catch (error) {

@@ -177,14 +177,11 @@ export default function Footer() {
                 const form = e.currentTarget;
                 setIsSubscribing(true);
                 const email = (form.elements.namedItem("email") as HTMLInputElement).value;
-                console.log("Submitting newsletter subscription:", email);
                 try {
                   const result = await subscribeNewsletter({ email });
-                  console.log("Newsletter subscription result:", result);
                   setToastOpen(true);
                   form.reset();
                 } catch (error) {
-                  console.error("Failed to subscribe to newsletter:", error);
                   alert("Failed to subscribe. Please try again.");
                 } finally {
                   setIsSubscribing(false);
